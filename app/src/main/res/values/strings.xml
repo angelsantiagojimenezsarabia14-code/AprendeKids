@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">AprendeKids</string>
+    <string name="titulo_login">Inicio de Sesión</string>
+    <string name="label_nombre">Nombre</string>
+    <string name="label_apellido">Apellido</string>
+    <string name="elige_avatar">Elige tu avatar:</string>
+    <string name="avatar_zorro">Zorro</string>
+    <string name="avatar_conejo">Conejo</string>
+    <string name="avatar_oso">Oso</string>
+    <string name="avatar_gato">Gato</string>
+    <string name="btn_entrar">Entrar</string>
+    <string name="cd_logo">Logo AprendeKids</string>
+    <string name="titulo_bienvenida">¡Bienvenido a AprendeKids!</string>
+    <string name="subtitulo_bienvenida">Ingresa tus datos para comenzar a aprender</string>
+    <string name="label_avatar">Elige tu avatar</string>
+
+    <string name="saludo_inicio">¡Hola, %1$s!</string>
+    <string name="subtitulo_inicio">¿Qué materia quieres estudiar hoy?</string>
+    <string name="resumen_puntos">Puntos: %1$d  •  Racha: %2$d días</string>
+    <string name="materia_matematicas">Matemáticas</string>
+    <string name="materia_espanol">Español</string>
+    <string name="materia_ciencias">Ciencias Naturales</string>
+    <string name="materia_historia">Historia</string>
+    <string name="materia_geografia">Geografía</string>
+    <string name="materia_ingles">Inglés</string>
+    <string name="nombre_invitado">Estudiante</string>
+    <string name="desc_matematicas">Números, sumas, restas y juegos de lógica</string>
+    <string name="desc_espanol">Lectura, ortografía y comprensión de cuentos</string>
+    <string name="desc_ciencias">El cuerpo humano, animales y la naturaleza</string>
+    <string name="desc_historia">Culturas antiguas y héroes de México</string>
+    <string name="desc_geografia">Mapas, estados, países y nuestro planeta</string>
+    <string name="desc_ingles">Palabras básicas, colores y saludos en inglés</string>
+    <string name="btn_regresar">Regresar</string>
+</resources>
