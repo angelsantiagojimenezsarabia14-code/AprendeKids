@@ -8,7 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,17 +16,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.angel.aprendekids.R
+import com.angel.aprendekids.domain.model.Estudiante
 
 @Composable
 fun PanelMateriasScreen(
-    nombreEstudiante: String,
-    mensajeError: String?,
+    estudiante: Estudiante?,
     onRegresarClick: () -> Unit,
-    onActualizarNombre: (String) -> Unit,
-    onEliminarPerfil: () -> Unit
+    onMateriaClick: (String) -> Unit,
+    onLogrosClick: () -> Unit,
+    onPerfilClick: () -> Unit
 ) {
-    var editando by remember { mutableStateOf(false) }
-    var nuevoNombre by remember { mutableStateOf(nombreEstudiante) }
+    val nombreEstudiante = estudiante?.nombre ?: "Estudiante"
+    val puntosActuales = estudiante?.puntos ?: 0
+    val rachaActual = estudiante?.rachaDias ?: 1
 
     Column(
         modifier = Modifier
@@ -35,28 +37,44 @@ fun PanelMateriasScreen(
             .verticalScroll(rememberScrollState())
             .padding(24.dp)
     ) {
-
-        OutlinedButton(
-            onClick = onRegresarClick,
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.btn_regresar),
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = stringResource(R.string.btn_regresar),
-                fontWeight = FontWeight.Bold
-            )
+            OutlinedButton(
+                onClick = onRegresarClick,
+                shape = RoundedCornerShape(12.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.btn_regresar),
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = stringResource(R.string.btn_regresar), fontWeight = FontWeight.Bold)
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(
+                    onClick = onLogrosClick,
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    Text(text = stringResource(R.string.btn_logros), fontWeight = FontWeight.Bold)
+                }
+                OutlinedButton(
+                    onClick = onPerfilClick,
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    Text(text = stringResource(R.string.btn_perfil), fontWeight = FontWeight.Bold)
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         Text(
             text = stringResource(R.string.saludo_inicio, nombreEstudiante),
@@ -66,122 +84,77 @@ fun PanelMateriasScreen(
         )
 
         Text(
-            text = stringResource(R.string.subtitulo_inicio),
+            text = "Avatar: ${estudiante?.avatar ?: "Zorro"} • Grado: ${estudiante?.gradoEscolar ?: "3.°"}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
         ) {
             Text(
-                text = stringResource(R.string.resumen_puntos, 240, 5),
+                text = stringResource(R.string.resumen_puntos, puntosActuales, rachaActual),
                 modifier = Modifier.padding(16.dp),
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
-
-        if (editando) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                OutlinedTextField(
-                    value = nuevoNombre,
-                    onValueChange = { nuevoNombre = it },
-                    modifier = Modifier.weight(1f),
-                    singleLine = true,
-                    label = { Text("Nuevo nombre") }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = {
-                    onActualizarNombre(nuevoNombre)
-                    if (nuevoNombre.trim().length >= 2) {
-                        editando = false
-                    }
-                }) {
-                    Text("Guardar")
-                }
-            }
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                OutlinedButton(
-                    onClick = {
-                        nuevoNombre = nombreEstudiante
-                        editando = true
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Editar nombre")
-                }
-                OutlinedButton(
-                    onClick = onEliminarPerfil,
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text("Borrar perfil")
-                }
-            }
-        }
-
-        if (mensajeError != null) {
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = mensajeError,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-
         Spacer(modifier = Modifier.height(16.dp))
 
+        val matMatematicas = stringResource(R.string.materia_matematicas)
+        val matEspanol = stringResource(R.string.materia_espanol)
+        val matCiencias = stringResource(R.string.materia_ciencias)
+        val matHistoria = stringResource(R.string.materia_historia)
+        val matGeografia = stringResource(R.string.materia_geografia)
+        val matIngles = stringResource(R.string.materia_ingles)
+
         BotonMateria(
-            nombre = stringResource(R.string.materia_matematicas),
+            nombre = matMatematicas,
             descripcion = stringResource(R.string.desc_matematicas),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            onClick = { onMateriaClick(matMatematicas) }
         )
         BotonMateria(
-            nombre = stringResource(R.string.materia_espanol),
+            nombre = matEspanol,
             descripcion = stringResource(R.string.desc_espanol),
-            color = MaterialTheme.colorScheme.error
+            color = MaterialTheme.colorScheme.error,
+            onClick = { onMateriaClick(matEspanol) }
         )
         BotonMateria(
-            nombre = stringResource(R.string.materia_ciencias),
+            nombre = matCiencias,
             descripcion = stringResource(R.string.desc_ciencias),
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.tertiary,
+            onClick = { onMateriaClick(matCiencias) }
         )
         BotonMateria(
-            nombre = stringResource(R.string.materia_historia),
+            nombre = matHistoria,
             descripcion = stringResource(R.string.desc_historia),
-            color = MaterialTheme.colorScheme.surfaceTint
+            color = MaterialTheme.colorScheme.surfaceTint,
+            onClick = { onMateriaClick(matHistoria) }
         )
         BotonMateria(
-            nombre = stringResource(R.string.materia_geografia),
+            nombre = matGeografia,
             descripcion = stringResource(R.string.desc_geografia),
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
+            onClick = { onMateriaClick(matGeografia) }
         )
         BotonMateria(
-            nombre = stringResource(R.string.materia_ingles),
+            nombre = matIngles,
             descripcion = stringResource(R.string.desc_ingles),
-            color = MaterialTheme.colorScheme.inversePrimary
+            color = MaterialTheme.colorScheme.inversePrimary,
+            onClick = { onMateriaClick(matIngles) }
         )
     }
 }
 
 @Composable
-private fun BotonMateria(nombre: String, descripcion: String, color: Color) {
+private fun BotonMateria(nombre: String, descripcion: String, color: Color, onClick: () -> Unit) {
     Button(
-        onClick = { },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),

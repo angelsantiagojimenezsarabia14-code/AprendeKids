@@ -31,4 +31,10 @@
     <string name="desc_geografia">Mapas, estados, países y nuestro planeta</string>
     <string name="desc_ingles">Palabras básicas, colores y saludos en inglés</string>
     <string name="btn_regresar">Regresar</string>
+    <string name="btn_perfil">Mi Perfil</string>
+    <string name="btn_logros">Mis Logros</string>
+    <string name="titulo_perfil">Perfil y Control Parental</string>
+    <string name="titulo_logros">Progreso e Insignias</string>
+    <string name="btn_siguiente_pregunta">Siguiente</string>
+    <string name="btn_volver_materias">Volver a Materias</string>
 </resources>

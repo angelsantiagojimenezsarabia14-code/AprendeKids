@@ -31,7 +31,6 @@ class AprendeKidsViewModel(
         _mensajeError.value = null
     }
 
-
     fun registrarIngreso(nombreIngresado: String, onGuardado: () -> Unit) {
         val nombreLimpio = nombreIngresado.trim()
         if (nombreLimpio.isEmpty()) {
@@ -63,19 +62,33 @@ class AprendeKidsViewModel(
         }
     }
 
-    fun actualizarNombreEstudiante(nuevoNombre: String) {
+    fun sumarPuntos(puntosGanados: Int) {
+        val actual = estudianteActual.value ?: return
+        viewModelScope.launch {
+            repository.actualizarEstudiante(
+                actual.copy(puntos = actual.puntos + puntosGanados)
+            )
+        }
+    }
+
+    fun actualizarPerfilCompleto(nuevoNombre: String, nuevoGrado: String, nuevoAvatar: String) {
         val nombreLimpio = nuevoNombre.trim()
         val actual = estudianteActual.value ?: return
         if (nombreLimpio.length < 2) {
-            _mensajeError.value = "Escribe un nombre válido (mínimo 2 letras) para actualizar."
+            _mensajeError.value = "El nombre debe tener al menos 2 letras."
             return
         }
         _mensajeError.value = null
         viewModelScope.launch {
-            repository.actualizarEstudiante(actual.copy(nombre = nombreLimpio))
+            repository.actualizarEstudiante(
+                actual.copy(
+                    nombre = nombreLimpio,
+                    gradoEscolar = nuevoGrado,
+                    avatar = nuevoAvatar
+                )
+            )
         }
     }
-
 
     fun eliminarPerfilActual(onEliminado: () -> Unit) {
         val actual = estudianteActual.value ?: return
